@@ -9,7 +9,7 @@
       router>
       <el-row>
         <el-col style="width: 150px; text-align: center;">
-          <el-menu-item index="/task" style="font-size:16px;letter-spacing:2px;color:rgb(255, 208, 75)">
+          <el-menu-item index="/task" style="font-size:16px;letter-spacing:2px;color:rgba(221, 91, 10, 0.888)">
           <b @click="changeLogo()">{{logos[logoIndex]}}</b>
           </el-menu-item>
         </el-col>
@@ -62,7 +62,7 @@ export default {
   name: 'app-nav-menu',
   data () {
     return {
-      logos: ['🅖⚆🅒🅡🅞🅝', 'Ⓖ🅞Ⓒ🅡Ⓞ🅝', '🅖➲🅒🅡🅞🅝', '🅶OCRON'],
+      logos: ['DSC CRON', 'DSC➲CRON'],
       logoIndex: 0
     }
   },

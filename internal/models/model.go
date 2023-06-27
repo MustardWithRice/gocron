@@ -90,7 +90,8 @@ func CreateDb() *xorm.Engine {
 	// 本地环境开启日志
 	if macaron.Env == macaron.DEV {
 		engine.ShowSQL(true)
-		engine.Logger().SetLevel(core.LOG_DEBUG)
+		// engine.Logger().SetLevel(core.LOG_DEBUG)
+		engine.Logger().SetLevel(3)
 	}
 
 	go keepDbAlived(engine)

@@ -33,7 +33,8 @@
         style="width: 100%; margin: 20px 0;">
         <el-table-column
           prop="id"
-          label="节点ID">
+          label="节点ID"
+          width="100">
         </el-table-column>
         <el-table-column
           prop="alias"

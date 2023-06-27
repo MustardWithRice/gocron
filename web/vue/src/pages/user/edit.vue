@@ -9,7 +9,7 @@
       </el-breadcrumb>
       <el-form ref="form" class="page-form" :model="form" :rules="formRules" label-width="100px">
         <el-row>
-          <el-col :span="8">
+          <el-col :span="10">
             <el-input v-model="form.id" type="hidden"></el-input>
             <el-form-item label="用户名" prop="name">
               <el-input v-model="form.name"></el-input>
@@ -25,8 +25,8 @@
                 <el-input v-model="form.confirm_password" type="password"></el-input>
               </el-form-item>
             </template>
-            <el-form-item label="角色" prop="is_admin">
-              <el-radio-group v-model="form.is_admin">
+            <el-form-item label="角色" prop="is_admin" style="">
+                <el-radio-group v-model="form.is_admin">
                 <el-radio :label="0">
                   普通用户
                   <el-tooltip placement="top">

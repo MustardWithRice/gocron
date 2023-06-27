@@ -17,7 +17,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="5">
+          <el-col :span="6">
             <el-form-item label="任务类型">
               <span slot="label">
                 任务类型
@@ -40,7 +40,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="5" v-if="form.level === 1">
+          <el-col :span="6" v-if="form.level === 1">
             <el-form-item label="依赖关系">
               <span slot="label">
                 依赖关系
@@ -63,7 +63,9 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="5">
+        </el-row>
+        <el-row>
+          <el-col :span="8">
             <el-form-item label="标签">
               <el-input
                 v-model.trim="form.tag"
