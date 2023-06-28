@@ -42,8 +42,19 @@ package: build-vue statik
 	bash ./package.sh
 
 .PHONY: package-all
-package-all: build-vue statik
-	bash ./package.sh -p 'linux darwin windows'
+
+package-linux: build-vue statik
+	bash ./package.sh -p 'linux' -a amd64
+
+package-wins: build-vue statik
+	bash ./package.sh -p 'windows' -a amd64
+
+package-mac: build-vue statik
+	bash ./package.sh -p 'darwin' -a amd64
+
+package-mac_m1: build-vue statik
+	bash ./package.sh -p 'darwin' -a arm64
+
 
 .PHONY: build-vue
 build-vue:
