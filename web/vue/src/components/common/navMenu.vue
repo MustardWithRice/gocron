@@ -20,7 +20,7 @@
           </el-menu-item>
         </el-col>
         <el-col :span="2">
-          <el-menu-item index="/host">
+          <el-menu-item v-if="this.$store.getters.user.isSuperAdmin" index="/host">
             <i class="el-icon-upload"></i>
             <span slot="title">任务节点</span>
           </el-menu-item>

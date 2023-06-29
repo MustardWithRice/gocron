@@ -88,6 +88,34 @@ func Detail(ctx *macaron.Context) string {
 	return jsonResp.Success(utils.SuccessContent, task)
 }
 
+// 所有任务标签/创建人
+func Tags(ctx *macaron.Context) string {
+	tagModel := new(models.Tags)
+	tags, err := tagModel.GetTags()
+	jsonResp := utils.JsonResponse{}
+	if err != nil {
+		logger.Errorf("获取任务标签失败, ", err)
+		return jsonResp.Success(utils.SuccessContent, nil)
+	}
+
+	return jsonResp.Success(utils.SuccessContent, tags)
+
+}
+
+func Creaters (ctx *macaron.Context) string {
+	createrModel := new(models.Creaters)
+	creaters, err := createrModel.GetCreaters()
+	jsonResp := utils.JsonResponse{}
+	if err != nil {
+		logger.Errorf("获取任务创建人失败, ", err)
+		return jsonResp.Success(utils.SuccessContent, nil)
+	}
+
+	return jsonResp.Success(utils.SuccessContent, creaters)
+}
+
+
+
 // 保存任务  todo 拆分为多个方法
 func Store(ctx *macaron.Context, form TaskForm) string {
 	json := utils.JsonResponse{}

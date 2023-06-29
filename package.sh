@@ -80,7 +80,6 @@ set_os_arch() {
 
     if [[ ${#INPUT_ARCH[@]} = 0 ]];then
         INPUT_ARCH=("${DEFAULT_ARCH}")
-        echo "111: ${INPUT_ARCH}"
     fi
 
     for OS in "${INPUT_OS[@]}"; do
@@ -90,7 +89,6 @@ set_os_arch() {
     done
 
     for ARCH in "${INPUT_ARCH[@]}";do
-        echo "222: ${ARCH}"
         if [[ ! "${SUPPORT_ARCH[*]}" =~ ${ARCH} ]]; then
             print_message_and_exit "不支持的CPU架构${ARCH}"
         fi
@@ -126,14 +124,12 @@ build() {
     local FILENAME=''
     for OS in "${INPUT_OS[@]}";do
         for ARCH in "${INPUT_ARCH[@]}";do
-            echo "333: ${ARCH}"
             if [[ "${OS}" = "windows"  ]];then
                 FILENAME=${BINARY_NAME}.exe
             else
                 FILENAME=${BINARY_NAME}
             fi
             cmd="env CGO_ENABLED=0 GOOS=${OS} GOARCH=${ARCH} go build -ldflags \"${LDFLAGS}\" -o ${BUILD_DIR}/${BINARY_NAME}-${OS}-${ARCH}/${FILENAME} ${MAIN_FILE}"
-            echo "build command: ${cmd}"
             eval ${cmd}
         done
     done
@@ -145,15 +141,12 @@ package_binary() {
 
     for OS in "${INPUT_OS[@]}";do
         for ARCH in "${INPUT_ARCH[@]}";do
-            echo "444: ${ARCH}"
         package_file ${BINARY_NAME}-${OS}-${ARCH}
         if [[ "${OS}" = "windows" ]];then
             command="zip -rq ../${PACKAGE_DIR}/${BINARY_NAME}-${VERSION}-${OS}-${ARCH}.zip ${BINARY_NAME}-${OS}-${ARCH}"
-            echo "windows command: ${command}"
             eval ${command}
         else
             command="tar czf ../${PACKAGE_DIR}/${BINARY_NAME}-${VERSION}-${OS}-${ARCH}.tar.gz ${BINARY_NAME}-${OS}-${ARCH}"
-            echo "linux/macos command: ${command}"
             eval ${command}
         fi
         done

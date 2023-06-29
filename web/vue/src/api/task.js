@@ -43,5 +43,13 @@ export default {
 
   run (id, callback) {
     httpClient.get(`/task/run/${id}`, {}, callback)
+  },
+
+  getTags (callback) {
+    httpClient.get(`/task/getTags`, {}, callback)
+  },
+
+  getCreaters (callback) {
+    httpClient.get(`/task/getCreaters`, {}, callback)
   }
 }

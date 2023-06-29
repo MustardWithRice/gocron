@@ -10,31 +10,38 @@
     <el-form :inline="true" >
       <el-row>
         <el-form-item label="">
-          <el-input placeholder="请输入任务ID" v-model.trim="searchParams.id"></el-input>
-        </el-form-item>
-        <el-form-item label="">
-          <el-input placeholder="请输入任务名称" v-model.trim="searchParams.name"></el-input>
-        </el-form-item>
-        <el-form-item label="">
-          <el-input placeholder="请输入任务命令" v-model.trim="searchParams.command"></el-input>
-        </el-form-item>
-        <el-form-item label="">
-          <el-input placeholder="请输入标签" v-model.trim="searchParams.tag"></el-input>
-        </el-form-item>
-        <el-form-item label="">
-          <el-select v-model.trim="searchParams.protocol">
-            <el-option label="请选择执行方式" value=""></el-option>
+          <el-select
+            v-model.trim="searchParams.creater"
+            placeholder="请选择创建人"
+            clearable
+          >
             <el-option
-              v-for="item in protocolList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              v-for="item in taskCreaters"
+              :key="item.creater"
+              :label="item.cn_name"
+              :value="item.creater">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="">
-          <el-select v-model.trim="searchParams.host_id">
-            <el-option label="请选择任务节点" value=""></el-option>
+          <el-select
+            v-model.trim="searchParams.tag"
+            placeholder="请选择标签"
+            clearable
+          >
+            <el-option
+              v-for="item in taskTags"
+              :key="item.tag"
+              :label="item.tag"
+              :value="item.tag">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="">
+          <el-input placeholder="请输入任务名称" v-model.trim="searchParams.name"></el-input>
+        </el-form-item>
+        <!-- <el-form-item label="">
+          <el-select v-model.trim="searchParams.host_id" placeholder="请选择任务节点">
             <el-option
               v-for="item in hosts"
               :key="item.id"
@@ -42,10 +49,9 @@
               :value="item.id">
             </el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item label="">
-          <el-select v-model.trim="searchParams.status">
-            <el-option label="请选择任务状态" value=""></el-option>
+        </el-form-item> -->
+        <!-- <el-form-item label="">
+          <el-select v-model.trim="searchParams.status" placeholder="请选择任务状态">
             <el-option
               v-for="item in statusList"
               :key="item.value"
@@ -53,7 +59,7 @@
               :value="item.value">
             </el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
           <el-button type="primary" icon="el-icon-search" @click="search()">搜索</el-button>
           <el-button type="info" icon="el-icon-circle-close-outline" @click="resetSearch()">重置</el-button>
@@ -112,6 +118,10 @@
       <el-table-column
         prop="name"
         label="任务名称" style="width: 30%">
+      </el-table-column>
+      <el-table-column
+        prop="creator_name"
+        label="创建人">
       </el-table-column>
       <el-table-column
         prop="tag"
@@ -207,6 +217,8 @@ export default {
   data () {
     return {
       tasks: [],
+      taskTags: [],
+      taskCreaters: [],
       hosts: [],
       taskTotal: 0,
       searchParams: {
@@ -251,6 +263,8 @@ export default {
     }
 
     this.search()
+    this.getTags()
+    this.getCreaters()
   },
   filters: {
     formatLevel (value) {
@@ -354,6 +368,17 @@ export default {
     toTasksByTag (item) {
       this.searchParams.tag = item.tag
       this.search()
+    },
+    getTags (callback = null) {
+      taskService.getTags((data) => {
+        this.taskTags = data
+      })
+    },
+    getCreaters (callback = null) {
+      taskService.getCreaters((data) => {
+        this.taskCreaters = data
+        console.log('taskCreaters:', this.taskCreaters)
+      })
     }
   }
 }

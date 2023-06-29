@@ -92,6 +92,8 @@ func Register(m *macaron.Macaron) {
 		m.Post("/enable/:id", task.Enable)
 		m.Post("/disable/:id", task.Disable)
 		m.Get("/run/:id", task.Run)
+		m.Get("/getTags", task.Tags)
+		m.Get("/getCreaters", task.Creaters)
 	})
 
 	// 主机
@@ -252,6 +254,8 @@ func urlAuth(ctx *macaron.Context) {
 		"",
 		"/install/status",
 		"/task",
+		"/task/getTags",
+		"/task/getCreaters",
 		"/task/log",
 		"/host",
 		"/host/all",

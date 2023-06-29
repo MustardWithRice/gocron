@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 	"time"
 
@@ -63,9 +64,10 @@ type Task struct {
 	Updated          time.Time            `json:"updated" xorm:"datetime notnull updated"`       // 更新时间
 	Creater          int                  `json:"creater" xorm:"int notnull default 0"`          // 创建者
 	Updater          int                  `json:"updater" xorm:"int notnull default 0"`          // 更新者
-	BaseModel        `json:"-" xorm:"-"`
-	Hosts            []TaskHostDetail `json:"hosts" xorm:"-"`
-	NextRunTime      time.Time        `json:"next_run_time" xorm:"-"`
+	BaseModel        						`json:"-" xorm:"-"`
+	Hosts            []TaskHostDetail 		`json:"hosts" xorm:"-"`
+	NextRunTime      time.Time        		`json:"next_run_time" xorm:"-"`
+	CreatorName 	 string 				`json:"creator_name" xorm:"-"`
 }
 
 func taskHostTableName() []string {
@@ -153,10 +155,39 @@ func (task *Task) setHostsForTasks(tasks []Task) ([]Task, error) {
 			return nil, err
 		}
 		tasks[i].Hosts = taskHostDetails
+		// 查询任务创建人
+		taskCreator, err := task.getCreatorName(value.Creater)
+		if err != nil {
+			return nil, err
+		}
+		tasks[i].CreatorName = taskCreator
+
 	}
 
 	return tasks, err
 }
+
+func userTableName() []string {
+	return []string{TablePrefix + "user", "u"}
+}
+
+func taskTableName() []string {
+	return []string{TablePrefix + "task", "th"}
+}
+
+// 获取任务的创建人
+func (task *Task) getCreatorName(creater int) (string, error) {
+	var creatorName string
+	_, err := Db.Table(taskTableName()).
+		Join("LEFT", userTableName(), "th.creater=u.id").
+		Where("th.creater = ?", creater).
+		Cols("u.cn_name").
+		Get(&creatorName) // 传递 creatorName 的指针
+
+	return creatorName, err
+}
+
+
 
 // 判断任务名称是否存在
 func (task *Task) NameExist(name string, id int) (bool, error) {
@@ -193,6 +224,30 @@ func (task *Task) Detail(id int) (Task, error) {
 	t.Hosts, err = taskHostModel.GetHostIdsByTaskId(id)
 
 	return t, err
+}
+
+type Tags struct {
+	Tag string `json:"tag" xorm:"varchar"`
+}
+
+type Creaters struct {
+	Creater	int		`json:"creater" xorm:"int"` 
+	CnName	string	`json:"cn_name" xorm:"varchar"`  
+}
+
+func (creaters *Creaters) GetCreaters() ([]Creaters, error) {
+	resList := make([]Creaters, 0)
+	sql := "SELECT th.creater as creater, u.cn_name as cn_name FROM (SELECT creater FROM %s GROUP BY creater) AS th LEFT JOIN %s AS u ON th.creater = u.id"
+	sql = fmt.Sprintf(sql, taskTableName()[0], userTableName()[0])
+	err := Db.SQL(sql).Find(&resList)
+	return resList, err
+}
+
+func (tags *Tags) GetTags() ([]Tags, error) {
+	resList := make([]Tags, 0)
+	sql := "SELECT tag FROM " + taskTableName()[0] + " GROUP BY tag"
+	err := Db.SQL(sql).Find(&resList)
+	return resList, err
 }
 
 func (task *Task) List(params CommonMap) ([]Task, error) {

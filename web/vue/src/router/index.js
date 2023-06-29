@@ -77,10 +77,10 @@ const router = new Router({
     {
       path: '/host',
       name: 'host-list',
-      component: HostList,
-      meta: {
-        noNeedAdmin: true
-      }
+      component: HostList
+      // meta: {
+      //   noNeedAdmin: true
+      // }
     },
     {
       path: '/host/create',
