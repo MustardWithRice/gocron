@@ -366,7 +366,11 @@ export default {
       this.$router.push(path)
     },
     toTasksByTag (item) {
-      this.searchParams.tag = item.tag
+      this.searchParams = {
+        page_size: 20,
+        page: 1,
+        tag: item.tag
+      }
       this.search()
     },
     getTags (callback = null) {

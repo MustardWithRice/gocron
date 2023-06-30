@@ -1,6 +1,7 @@
 package task
 
 import (
+	// "fmt"
 	"strconv"
 	"strings"
 
@@ -379,6 +380,11 @@ func parseQueryParams(ctx *macaron.Context) models.CommonMap {
 	params["Protocol"] = ctx.QueryInt("protocol")
 	params["Tag"] = ctx.QueryTrim("tag")
 	params["Command"] = ctx.QueryTrim("command")
+	creater := ctx.QueryInt("creater")
+	if creater == 0 {
+		creater = -1
+	}
+	params["Creater"] = creater
 	status := ctx.QueryInt("status")
 	if status >= 0 {
 		status -= 1

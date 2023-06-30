@@ -69,6 +69,9 @@ install-vue:
 run-vue:
 	cd web/vue && yarn run dev
 
+run-server: build kill
+	./bin/gocron web
+
 .PHONY: statik
 statik:
 	go install github.com/rakyll/statik

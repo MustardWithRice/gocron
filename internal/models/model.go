@@ -91,6 +91,7 @@ func CreateDb() *xorm.Engine {
 	if macaron.Env == macaron.DEV {
 		engine.ShowSQL(true)
 		// engine.Logger().SetLevel(core.LOG_DEBUG)
+		// engine.Logger().SetLevel(1)
 		engine.Logger().SetLevel(3)
 	}
 
